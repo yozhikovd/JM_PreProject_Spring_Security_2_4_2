@@ -13,8 +13,11 @@ import javax.jws.WebParam;
 @RequestMapping("/users")
 public class UsersController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UsersController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("")
     public String showAllUsers(Model model) {
