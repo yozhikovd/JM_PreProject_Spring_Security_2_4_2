@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>AllUsers</title>
+    <title>AllUser</title>
 
     <style>
         table {
@@ -11,6 +11,7 @@
             color: black;
             border-spacing: 1px;
         }
+
         td, th {
             background: whitesmoke; /* Цвет фона ячеек */
             padding: 5px; /* Поля вокруг текста */
@@ -23,18 +24,25 @@
 
 <table>
     <tr>
+        <th>ID</th>
         <th>Name</th>
         <th>LastName</th>
         <th>Age</th>
+        <th>Update</th>
+        <th>Delete</th>
     </tr>
     <tr th:each="user : ${usersList}">
+        <td th:text="${user.getId()}">model</td>
         <td th:text="${user.getName()}">model</td>
         <td th:text="${user.getLastName()}">model</td>
         <td th:text="${user.getAge()}">model</td>
-
+        <td> <a th:href="@{/users/{id}/edit (id =${user.getId()})}">Update</a> </td>
+        <td> <a th:href="@{/users/{id}/delete (id =${user.getId()})}">Delete</a> </td>
     </tr>
 </table>
-
-
+        <hr>
+        <form action="/users/addNewUser">
+            <button>Add new User</button>
+        </form>
 </body>
 </html>

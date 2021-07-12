@@ -39,4 +39,10 @@ public class UserDaoImpl implements UserDao{
         userToUpdate.setAge(user.getAge());
         entityManager.merge(userToUpdate);
     }
+
+    @Override
+    public void deleteUser(int id) {
+        User userToDelete = getUserById(id);
+        entityManager.remove(userToDelete);
+    }
 }
