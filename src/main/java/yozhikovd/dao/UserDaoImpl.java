@@ -21,7 +21,15 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public User getUserById(int id) {
-        return null;
+    public User getUserById(final int id) {
+
+        return userList().stream().filter(user -> user.getId() == id).findAny().orElse(null);
+
+    }
+
+    @Override
+    public void addNewUser(User user) {
+        entityManager.persist(user);
+        System.out.println("Пользователь с именем " + user.getLastName() + user.getName() +" успешно добавлен");
     }
 }
