@@ -22,14 +22,21 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public User getUserById(final int id) {
-
         return userList().stream().filter(user -> user.getId() == id).findAny().orElse(null);
-
     }
 
     @Override
     public void addNewUser(User user) {
         entityManager.persist(user);
         System.out.println("Пользователь с именем " + user.getLastName() + user.getName() +" успешно добавлен");
+    }
+
+    @Override
+    public void updateUser(int id, User user) {
+        User userToUpdate = getUserById(id);
+        userToUpdate.setName(user.getName());
+        userToUpdate.setLastName(user.getLastName());
+        userToUpdate.setAge(user.getAge());
+        entityManager.merge(userToUpdate);
     }
 }
