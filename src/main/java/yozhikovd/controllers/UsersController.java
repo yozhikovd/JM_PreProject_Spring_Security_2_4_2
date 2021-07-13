@@ -1,13 +1,15 @@
 package yozhikovd.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import yozhikovd.models.User;
 import yozhikovd.services.UserService;
 
-import javax.jws.WebParam;
 
 @Controller
 @RequestMapping("/users")
@@ -37,25 +39,32 @@ public class UsersController {
     }
 
     @PostMapping()
-    public String createUser(@ModelAttribute("user") User user) {
+    public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors())
+            return "add-new-user";
+
         userService.addNewUser(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}/edit")
-    public String editUser(Model model, @PathVariable("id") int id){
+    public String editUser(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.getUserById(id));
         return "edit-user";
 
     }
+
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id){
+    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id) {
+        if (bindingResult.hasErrors())
+            return "edit-user";
         userService.updateUser(id, user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteUser(@PathVariable("id") int id){
+    public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/users";
     }

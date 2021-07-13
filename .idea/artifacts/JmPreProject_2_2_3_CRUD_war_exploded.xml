@@ -50,8 +50,8 @@
           <element id="library" level="project" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.23" />
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.11.4" />
-          <element id="library" level="project" name="Maven: org.hibernate.validator:hibernate-validator:6.1.0.Final" />
-          <element id="library" level="project" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" />
+          <element id="library" level="project" name="Maven: org.hibernate.validator:hibernate-validator:7.0.1.Final" />
+          <element id="library" level="project" name="Maven: jakarta.validation:jakarta.validation-api:3.0.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -1,7 +1,10 @@
 package yozhikovd.models;
+import jakarta.validation.constraints.Min;
+import org.hibernate.validator.constraints.*;
 
 
 import javax.persistence.*;
+
 
 @Entity
 @Table(name = "users")
@@ -12,12 +15,16 @@ public class User {
     @Column(name = "id")
     private Long id;
 
+
     @Column(name = "name")
+    @Length(min = 3, max = 30, message = "Name must be between 2 and 30 characters")
     private String name;
 
     @Column(name = "lastName")
+    @Length(min = 3, max = 30, message = "LastName must be between 2 and 30 characters")
     private String lastName;
 
+    @Min(value = 0)
     @Column(name = "age")
     private int age;
 
