@@ -28,6 +28,9 @@
         <th>Name</th>
         <th>LastName</th>
         <th>Age</th>
+        <th>E-Mail</th>
+        <th>Username</th>
+        <th>Password</th>
         <th>Update</th>
         <th>Delete</th>
     </tr>
@@ -36,6 +39,9 @@
         <td th:text="${user.getName()}">model</td>
         <td th:text="${user.getLastName()}">model</td>
         <td th:text="${user.getAge()}">model</td>
+        <td th:text="${user.getEmail()}">model</td>
+        <td th:text="${user.getUsername()}">model</td>
+        <td th:text="${user.getPassword()}">model</td>
         <td> <a th:href="@{/users/{id}/edit (id =${user.getId()})}">Update</a> </td>
         <td> <a th:href="@{/users/{id}/delete (id =${user.getId()})}">Delete</a> </td>
     </tr>

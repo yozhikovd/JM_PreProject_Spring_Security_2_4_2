@@ -16,8 +16,9 @@ public class UserDaoImpl implements UserDao{
     EntityManager entityManager;
 
     @Override
+    @SuppressWarnings(value = "error")
     public List<User> userList() {
-        return entityManager.createQuery("from User").getResultList();
+        return entityManager.createQuery("FROM User").getResultList();
     }
 
     @Override
@@ -37,6 +38,9 @@ public class UserDaoImpl implements UserDao{
         userToUpdate.setName(user.getName());
         userToUpdate.setLastName(user.getLastName());
         userToUpdate.setAge(user.getAge());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setUsername(user.getUsername());
+        userToUpdate.setPassword(user.getPassword());
         entityManager.merge(userToUpdate);
     }
 
