@@ -10,18 +10,19 @@ import yozhikovd.services.UserService;
 
 
 @Controller
-@RequestMapping("/users")
-public class UsersController {
+@RequestMapping("/admin")
+public class AdminController {
 
     private final UserService userService;
 
-    public UsersController(UserService userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("")
     public String showAllUsers(Model model) {
         model.addAttribute("usersList", userService.userList());
+        System.out.println("сработал контроллер юзер");
         return "show-all-users";
     }
 

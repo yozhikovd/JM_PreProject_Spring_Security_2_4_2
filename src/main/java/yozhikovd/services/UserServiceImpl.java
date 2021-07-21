@@ -1,15 +1,20 @@
 package yozhikovd.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yozhikovd.dao.UserDao;
+import yozhikovd.models.Role;
 import yozhikovd.models.User;
 
 import java.util.List;
 
 
-@Service
+@Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -49,4 +54,20 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(int id) {
         userDao.deleteUser(id);
     }
+
+    @Override
+    public User findByUsername(String username) {
+       return userDao.findByUsername(username);
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return null;
+    }
+
+    @Override
+    public Role getRoleById(long id) {
+        return null;
+    }
+
 }
