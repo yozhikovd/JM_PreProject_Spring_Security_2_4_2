@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder()); // конфигурация для прохождения аутентификации
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());; // конфигурация для прохождения аутентификации
     }
 
 
@@ -66,27 +66,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // защищенные URL
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/user/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-                .anyRequest().authenticated()
-        ;
+                .anyRequest().authenticated();
         System.out.println("сработал секьюрити");
     }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(daoAuthenticationProvider());
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-
-//    @Bean
-//    protected DaoAuthenticationProvider daoAuthenticationProvider(){
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-//        return daoAuthenticationProvider;
-//    }
 
 }

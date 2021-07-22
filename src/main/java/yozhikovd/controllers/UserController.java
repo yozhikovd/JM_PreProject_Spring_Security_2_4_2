@@ -19,7 +19,4 @@ public class UserController {
         return "show-all-users";
     }
 
-
-
-
 }

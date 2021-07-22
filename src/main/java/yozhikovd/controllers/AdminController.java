@@ -19,7 +19,7 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("")
+    @GetMapping("/show-all-users")
     public String showAllUsers(Model model) {
         model.addAttribute("usersList", userService.userList());
         System.out.println("сработал контроллер юзер");
