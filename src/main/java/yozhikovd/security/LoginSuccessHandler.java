@@ -1,4 +1,4 @@
-package yozhikovd.configs;
+package yozhikovd.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,13 +19,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (roles.contains("ROLE_ADMIN")) {
-            httpServletResponse.sendRedirect("/admin/show-all-users");
+            httpServletResponse.sendRedirect("/admin");
         }
         else if (roles.contains("ROLE_USER")) {
-            httpServletResponse.sendRedirect("/user/userInfo");
+            httpServletResponse.sendRedirect("/user");
         }
         else {
-            System.out.println("не сработал редирект с хендлера");
             httpServletResponse.sendRedirect("/");
         }
     }

@@ -31,6 +31,7 @@
         <th>E-Mail</th>
         <th>Username</th>
         <th>Password</th>
+        <th>Role</th>
         <th>Update</th>
         <th>Delete</th>
     </tr>
@@ -42,13 +43,24 @@
         <td th:text="${user.getEmail()}">model</td>
         <td th:text="${user.getUsername()}">model</td>
         <td th:text="${user.getPassword()}">model</td>
-        <td> <a th:href="@{/users/{id}/edit (id =${user.getId()})}">Update</a> </td>
-        <td> <a th:href="@{/users/{id}/delete (id =${user.getId()})}">Delete</a> </td>
+        <td th:text="${user.getUserRole()}">model</td>
+        <td> <a th:href="@{/admin/{id}/edit (id =${user.getId()})}">Update</a> </td>
+        <td> <a th:href="@{/admin/{id}/delete (id =${user.getId()})}">Delete</a> </td>
     </tr>
 </table>
         <hr>
-        <form action="/users/addNewUser">
+        <form action="/admin/addNewUser">
             <button>Add new User</button>
         </form>
+        <br>
+        <form action="/user">
+            <button>Go to user page</button>
+        </form>
+        <br>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Log out" />
+        </form>
+
 </body>
+
 </html>

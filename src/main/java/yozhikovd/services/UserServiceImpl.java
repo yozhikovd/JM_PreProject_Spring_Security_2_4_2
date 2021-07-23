@@ -1,16 +1,8 @@
 package yozhikovd.services;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yozhikovd.dao.UserDao;
-import yozhikovd.models.Role;
 import yozhikovd.models.User;
-
 import java.util.List;
 
 
@@ -22,7 +14,6 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
     }
-
 
     @Override
     @Transactional
@@ -45,8 +36,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(int id, User user) {
-        userDao.updateUser(id, user);
+    public void updateUser(User user) {
+        userDao.updateUser(user);
     }
 
     @Override
@@ -57,17 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-       return userDao.findByUsername(username);
-    }
-
-    @Override
-    public List<Role> getAllRoles() {
-        return null;
-    }
-
-    @Override
-    public Role getRoleById(long id) {
-        return null;
+        return userDao.findByUsername(username);
     }
 
 }

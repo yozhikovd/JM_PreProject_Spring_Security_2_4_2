@@ -21,12 +21,16 @@ public class Role implements GrantedAuthority {
     @Column (name = "role")
     public String role;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
 
+    public Role(int id, String role) {
+        this.id = id;
+        this.role = role;
+    }
 
     @Override
     public String getAuthority() {
-        return role;
+        return getRole();
     }
 }

@@ -4,11 +4,6 @@ import lombok.*;
 import org.hibernate.validator.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
@@ -43,7 +38,7 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "password")
@@ -54,10 +49,30 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    public String getUserRole(){
+        boolean isAdmin = roles.stream().anyMatch(r -> r.role.equals("ROLE_ADMIN"));
+        boolean isUser = roles.stream().anyMatch(r -> r.role.equals("ROLE_USER"));
+
+        if (isAdmin && isUser){
+            return "ROLE_ADMIN, ROLE_USER";
+        }
+
+        return isAdmin ? "ROLE_ADMIN" : "ROLE_USER";
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
+    }
+
+    public User(String name, String lastName, int age, String email, String username, String password, Set<Role> roles) {
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
     }
 
     @Override
@@ -79,4 +94,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

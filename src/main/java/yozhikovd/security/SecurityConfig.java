@@ -1,4 +1,4 @@
-package yozhikovd.configs;
+package yozhikovd.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,58 +21,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(LoginSuccessHandler loginSuccessHandler, @Qualifier("myUserDetailsServiceImpl") UserDetailsService userDetailsService) {
+    public SecurityConfig(LoginSuccessHandler loginSuccessHandler,
+                          @Qualifier("myUserDetailsServiceImpl") UserDetailsService userDetailsService) {
         this.loginSuccessHandler = loginSuccessHandler;
         this.userDetailsService = userDetailsService;
     }
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());; // конфигурация для прохождения аутентификации
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-
 
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.csrf().disable();
+
         http.formLogin()
-                // указываем страницу с формой логина
                 .loginPage("/login")
-                //указываем логику обработки при логине
                 .successHandler(loginSuccessHandler)
-                // указываем action с формы логина
                 .loginProcessingUrl("/login")
-                // Указываем параметры логина и пароля с формы логина
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
-                // даем доступ к форме логина всем
-
                 .permitAll();
 
         http.logout()
-                // разрешаем делать логаут всем
                 .permitAll()
-                // указываем URL логаута
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                // указываем URL при удачном логауте
-                .logoutSuccessUrl("/login?logout")
-                //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
-                .and().csrf().disable();
+                .logoutSuccessUrl("/login?logout");
 
         http
-                // делаем страницу регистрации недоступной для авторизированных пользователей
                 .authorizeRequests()
-                //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
-                // защищенные URL
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/user/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
                 .anyRequest().authenticated();
-        System.out.println("сработал секьюрити");
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-
 }

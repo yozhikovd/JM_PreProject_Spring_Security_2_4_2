@@ -5,8 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import yozhikovd.models.Role;
 import yozhikovd.models.User;
 import yozhikovd.services.UserService;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Controller
@@ -14,22 +17,22 @@ import yozhikovd.services.UserService;
 public class AdminController {
 
     private final UserService userService;
-
     public AdminController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/show-all-users")
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    @GetMapping("")
     public String showAllUsers(Model model) {
         model.addAttribute("usersList", userService.userList());
-        System.out.println("сработал контроллер юзер");
         return "show-all-users";
     }
 
     @GetMapping("/{id}")
     public String showUserById(@PathVariable("id") int id, Model model) {
         model.addAttribute("userById", userService.getUserById(id));
-        return "show-user-by-id";
+        return "show-current-user";
     }
 
     @GetMapping("/addNewUser")
@@ -37,14 +40,27 @@ public class AdminController {
         return "add-new-user";
     }
 
-    @PostMapping()
-    public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-
+    @PostMapping("/createUser")
+    public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                             @RequestParam(required = false, name = "ADMIN") String ADMIN,
+                             @RequestParam(required = false, name = "USER") String USER) {
         if (bindingResult.hasErrors())
             return "add-new-user";
 
+        Set<Role> roles = new HashSet<>();
+        if (ADMIN != null) {
+            roles.add(new Role(1, ADMIN));
+        }
+        if (USER != null) {
+            roles.add(new Role(2, USER));
+        }
+        if (ADMIN == null && USER == null) {
+            roles.add(new Role(2, USER));
+        }
+
+        user.setRoles(roles);
         userService.addNewUser(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("/{id}/edit")
@@ -54,17 +70,41 @@ public class AdminController {
 
     }
 
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id) {
+    @PostMapping("/{id}")
+    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                         @PathVariable("id") int id,
+                         @RequestParam(required = false, name = "ADMIN") String ADMIN,
+                         @RequestParam(required = false, name = "USER") String USER){
+
         if (bindingResult.hasErrors())
             return "edit-user";
-        userService.updateUser(id, user);
-        return "redirect:/users";
+
+        Set<Role> roles = new HashSet<>();
+        if (ADMIN != null) {
+            roles.add(new Role(1, ADMIN));
+        }
+        if (USER != null) {
+            roles.add(new Role(2, USER));
+        }
+        if (ADMIN == null && USER == null ) {
+            roles.add(new Role(2, USER));
+        }
+            user.setRoles(roles);
+
+        userService.updateUser(user);
+        return "redirect:/admin";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
+
+
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
+
 }

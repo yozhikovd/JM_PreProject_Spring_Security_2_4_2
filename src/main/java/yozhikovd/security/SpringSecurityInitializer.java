@@ -1,4 +1,4 @@
-package yozhikovd.configs;
+package yozhikovd.security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
