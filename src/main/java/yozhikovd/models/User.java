@@ -1,4 +1,5 @@
 package yozhikovd.models;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.validator.constraints.*;
@@ -38,6 +39,7 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @UniqueElements
     @Column(name = "username", unique = true)
     private String username;
 

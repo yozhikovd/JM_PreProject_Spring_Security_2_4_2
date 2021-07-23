@@ -4,12 +4,15 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import yozhikovd.models.Role;
 import yozhikovd.models.User;
 import yozhikovd.services.UserService;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -42,10 +45,20 @@ public class AdminController {
 
     @PostMapping("/createUser")
     public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                             @RequestParam(required = false, name = "username") String username,
                              @RequestParam(required = false, name = "ADMIN") String ADMIN,
                              @RequestParam(required = false, name = "USER") String USER) {
-        if (bindingResult.hasErrors())
-            return "add-new-user";
+
+        //////////////////////// проверка на уникальность username и ошибки ////////////////////////////////
+
+        long i = userService.userList().stream().filter(user1 -> user1.getUsername().equals(username)).count();
+        if (i > 0){
+            bindingResult.rejectValue("username", "error.username", "Username must be Unique!");
+        }
+        if (bindingResult.hasErrors()){
+            return "add-new-user";}
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Set<Role> roles = new HashSet<>();
         if (ADMIN != null) {
